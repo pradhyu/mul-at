@@ -55,7 +55,7 @@ public class StoreServiceTest {
 		Assert.assertEquals(1, orderRepository.findAll().size());
 	}
 
-	@Test(expected = StoreException.class)
+	@Test
 	public void testStoreWithStoreException() throws StoreException {
 		Customer c = new Customer();
 		c.setName("test");
@@ -68,7 +68,13 @@ public class StoreServiceTest {
 		Assert.assertEquals(0, customerRepository.findAll().size());
 		Assert.assertEquals(0, orderRepository.findAll().size());
 
-		storeService.storeWithStoreException(c, o);
+		try {
+			storeService.storeWithStoreException(c, o);
+		}
+		catch(StoreException ex){
+		Assert.assertEquals(0,customerRepository.findAll().size());
+			Assert.assertEquals(0,orderRepository.findAll().size());
+		}
 	}
 
 	@Test(expected = NoRollbackException.class)
